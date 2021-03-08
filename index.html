@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="main_div">
+       <div class="music_container">
+           <h2 id="title">Aye Mere Humsafar</h2>
+           <h3 id="artist">Raj Barman,Anwesshaa</h3>
+           <div class="img_container">
+               <img src="img/1.jpg" alt="">
+           </div>
+           <audio src="audio/1.mp3"></audio>
+
+
+           <div class="progressbar_container" id="progress_container">
+               <div class="progress_duration_meter">
+                <div id="current_time">
+                    0:00
+                </div>   
+                <div id="duration">5.53</div>
+               </div>
+<div class="progress_div" id="progress_div">
+    <div class="progress" id="progress"></div>
+</div>
+           </div>
+
+           <div class="music_controls">
+            <i class="fa fa-backward" id="prev" title="previous"></i>
+            <i class="fa fa-play main_button"  id="play" title="play"></i>
+            <i class="fa fa-forward"  id="next" title="next"></i>
+
+           </div>
+       </div>
+    </div>
+    <script>
+        const music = document.querySelector("audio");
+const play = document.getElementById("play");
+const img = document.querySelector("img");
+const title = document.getElementById("title");
+const artist = document.getElementById("artist");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+let progress =document.getElementById("progress");
+let totall_duration =document.getElementById("duration");
+let current_time =document.getElementById("current_time");
+const progress_div = document.getElementById("progress_div");
+
+
+
+const songs =[
+    {
+        name: "1",
+        title: "Aye Mere Humsafar",
+        artist: "Raj Barman,Anwesshaa"
+    },
+    {
+        name: "2",
+        title: "Ae Dil Hai Mushkil ",
+        artist: "Suzzane D Mello"
+    },
+    {
+        name: "3",
+        title: "Bahon Ke Darmiyaan",
+        artist: " Akriti Kakar"
+    },
+    {
+        name: "4",
+        title: "Bheegi Bheegi",
+        artist: "Sreerama Chandra & Heeral Chhatralia"
+    },
+    {
+        name: "5",
+        title: "Chura Liya",
+        artist: "Sajan Patel Feat. Veena Parasher"
+    },
+    {
+        name: "6",
+        title: "Dilbar Mere ",
+        artist: " Rahul Vaidya "
+    },
+    {
+        name: "7",
+        title: "Do Lafzon Ki ",
+        artist: " Sajan Patel,Mridu Konwar"
+    },
+    {
+        name: "8",
+        title: "Gulabi Aankhen  ",
+        artist: "Sanam"
+    },
+    {
+        name: "9",
+        title: "Jaane Jaan Dhoondta",
+        artist: " Abhijeet,Sumedha"
+    },
+    {
+        name: "10",
+        title: "Jab Se Tere Naina ",
+        artist: "Shaan,Ritu Agarwal"
+    },
+    {
+        name: "11",
+        title: "Kehdoon-Tumhe",
+        artist: "Akriti-Kakar-_-Arnab-Chakraborty"
+    },
+    {
+        name: "12",
+        title: "Kuch Na Kaho",
+        artist: "Sanam ft. Shirley Setia"
+    },
+    {
+        name: "13",
+        title: "Kya Yahi Pyar Hai ",
+        artist: " Meiyang Chang & Shashaa Tirupati"
+    },
+    {
+        name: "14",
+        title: "Mere-Rang",
+        artist: "Suryaveer"
+    },
+    {
+        name: "15",
+        title: "Nahi-Nahi-Abhi-Nahi",
+        artist: "Ash-King-I-Jonita-Gandhi"
+    },
+    {
+        name: "16",
+        title: "Tu Tu Hai Wohi ",
+        artist: " Jonita Gandhi"
+    },
+    {
+        name: "17",
+        title: "Sagar Jaishi",
+        artist: "Sanam"
+    }
+   
+    
+]
+
+let isPlaying = false;
+
+
+const  playMusic= () =>{
+    isPlaying = true;
+    music.play();
+    play.classList.replace("fa-play", "fa-pause");
+    img.classList.add("anime");
+};
+
+
+const  pauseMusic= () =>{
+    isPlaying = false;
+    music.pause();
+    play.classList.replace("fa-pause" , "fa-play");
+    img.classList.remove("anime");
+};
+
+play.addEventListener("click", () =>{
+    if(isPlaying){
+        pauseMusic();
+    }else{
+        playMusic();
+        
+    }
+});
+
+//change music track
+
+const loadSong = (songs) =>{
+    title.textContent = songs.title;
+    artist.textContent = songs.artist;
+    music.src ="audio/"+ songs.name+".mp3";
+    img.src ="img/"+ songs.name+".jpg";
+}
+songIndex = 0;
+// loadSong(songs[0]);
+
+const nextSong =() =>{
+    songIndex =(songIndex+1) % songs.length;
+    loadSong(songs[songIndex]);
+    playMusic();
+}
+
+
+const prevSong =() =>{
+    songIndex =(songIndex-1 + songs.length) % songs.length;
+    loadSong(songs[songIndex]);
+    playMusic();
+}
+
+
+music.addEventListener("timeupdate", (event) =>{
+const {currentTime, duration} = event.srcElement;
+let progress_time = (currentTime / duration)* 100;
+progress.style.width =`${progress_time}%`;
+
+
+
+let min_duration =Math.floor(duration /60);
+let sec_duration = Math.floor(duration % 60);
+
+let total_duration = `${min_duration} : ${sec_duration}`;
+if(duration){
+    totall_duration.textContent = `${total_duration}`;
+}
+
+
+
+
+let min_currentTime =Math.floor(currentTime /60);
+let sec_currentTime = Math.floor(currentTime % 60);
+
+
+if(sec_currentTime <10){
+    sec_currentTime =`0${sec_currentTime}`;
+}
+let total_currentTime = `${min_currentTime} : ${sec_currentTime}`;
+    current_time.textContent = `${total_currentTime}`;
+
+
+
+});
+progress_div.addEventListener("click", (event) =>{
+    const {duration} = music;
+   
+  let move_progress = (event.offsetX / event.srcElement.clientWidth) * duration; 
+  
+  music.currentTime = move_progress;
+});
+
+
+music.addEventListener("ended", nextSong);
+
+next.addEventListener("click", nextSong);
+prev.addEventListener("click", prevSong);
+    </script>
+        <script src="js/music.js"></script>
+    </body>
+</html>
